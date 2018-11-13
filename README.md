@@ -19,7 +19,7 @@ When the checkbox is marked means category is hidden.
 Updating of the hide/show status of the category is performed thru standard WP Ajax functions. Wait until the animated indicator disappear in order to hide/show another category.
 
 ## Premium Version?
-Custom Tags And Fields for Woocommerce is completely free. 
+Hide Shop Categories for Woocommerce is completely free. 
 
 ## Support
 For any issue please submit here:
