@@ -21,7 +21,7 @@ function mg_hide_wc_categories_dashboard(){
   <p>Usage of Hide Shop Categories for Woocommerce is very simple.</p>
   <ul>
     <li>- open Products->Categories from the admin menu</li>
-    <li>- for each category you will have a column named Disabled</li>
+    <li>- for each category you will have a column named Hide</li>
     <li>- click on the checkbox of the Hide column to hide/show the category</li>
   </ul>
   <p>

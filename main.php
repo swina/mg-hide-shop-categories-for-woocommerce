@@ -3,7 +3,7 @@
 * Plugin Name: Moodgiver Hide Shop Categories
 * Plugin URI: https://github.com/swina/mg-hide-shop-categories-for-woocommerce
 * Description: Add hide flag to categories and disable from the standard categories menu
-* Version: 0.1
+* Version: 1.0
 * Author: Antonio Nardone
 * Author URI: https://antonionardone.com
 * License: GPL3

@@ -13,10 +13,10 @@ Hide Shop Categories for Woocommerce is a WordPress plugin to hide categories an
 == Description ==
 With Hide Shop Categories for Woocommerce you can hide categories and subcategories from the shop page, category page and product page.
 This can be useful if you want to temporarly hide some categories from your shop without the need to delete them.
-When a category is hidden also the url of the category page (i.e. http://yourdomain.com/category/your_category_slug) returns a 404 error.
+When a category is disabled also the url of the category page (i.e. http://yourdomain.com/category/your_category_slug) returns a 404 error.
 
 == Features==
-- Hide/Show categories from Woocommerce directly from the Category manager (Products->Categories)
+- Disable/Enable categories from Woocommerce directly from the Category manager (Products->Categories)
 
 == Requirements ==
 Woocommerce plugin version: ^3.4
@@ -29,7 +29,7 @@ Click Install
 Activate Hide Shop Categories for Woocommerce from your Plugins page
 
 == Usage ==
-From the admin backend click on Products->Categories. The column Hide is added to the categories list. Mark the checkbox to hide, unmark to show.
+From the admin backend click on Products->Categories. The column Disabled is added to the categories list. Mark the checkbox to disable, unmark to enable.
 
 
 == Release 1.0 ==

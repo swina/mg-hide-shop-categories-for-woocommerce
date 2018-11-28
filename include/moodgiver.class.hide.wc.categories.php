@@ -72,7 +72,7 @@ if( !class_exists('mood_hide_categories_woocommerce') ):
     }
 
     /**
-     * Meta Title and Description column added to category admin screen.
+     * Hide column added to category admin screen.
      *
      * @param mixed $columns
      * @return array
@@ -82,7 +82,7 @@ if( !class_exists('mood_hide_categories_woocommerce') ):
         return $columns;
     }
     /**
-     * Meta Title and Description column value added to product category admin screen.
+     * Hide column checkbox to product category admin screen.
      *
      * @param string $columns
      * @param string $column
@@ -102,7 +102,7 @@ if( !class_exists('mood_hide_categories_woocommerce') ):
     }
 
     function mg_hide_category_ajax_hide_category_woocommerce(){
-      update_term_meta($_POST['id'], 'wh_meta_hide', $_POST['checked']);
+      update_term_meta(filter_input(INPUT_POST,$_POST['id']), 'wh_meta_hide', filter_input(INPUT_POST,$_POST['checked']));
     }
 
     /**
