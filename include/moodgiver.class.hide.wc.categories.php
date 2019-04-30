@@ -115,10 +115,12 @@ if( !class_exists('mood_hide_categories_woocommerce') ):
      	// if a product category and on the shop page
     	if ( in_array( 'product_cat', $taxonomies ) && !is_admin() && (is_shop() || class_exists('Woocommerce'))  ) {
     	    foreach ( $terms as $key => $term ) {
-           if ( get_term_meta($term->term_id, 'wh_meta_hide',true) != 'on' ){
-    			    $new_terms[] = $term;
-              $sorted_menu[$key] = get_term_meta($term->term_id,'order',true);
-    		    }
+                if(isset($term->term_id) ){
+                    if ( get_term_meta($term->term_id, 'wh_meta_hide',true) != 'on' ){
+    			        $new_terms[] = $term;
+                        $sorted_menu[$key] = get_term_meta($term->term_id,'order',true);
+    		        }
+                }
     	    }
           array_multisort( $sorted_menu, SORT_ASC, $new_terms );
     	    $terms = $new_terms;
