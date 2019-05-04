@@ -19,6 +19,7 @@ if( !class_exists('mood_hide_categories_woocommerce') ):
             add_filter( 'get_terms', array($this,'mg_hide_category_get_subcategory_terms'), 10, 3 );
             add_action( 'woocommerce_archive_description', array ( $this , 'mg_hide_category_check_category_disabled'),10,1);
             add_action('template_redirect',array ( $this , 'mg_redirect_single_product_page_when_all_categories_hidden'),10,1);
+			add_action( 'pre_get_posts', array ( $this ,'mg_exclude_products_from_results_when_all_categories_are_hidden'),10,1 );
         }
 
 
@@ -169,6 +170,59 @@ if( !class_exists('mood_hide_categories_woocommerce') ):
                     }
                 }
             }
+        }
+		        function mg_exclude_products_from_results_when_all_categories_are_hidden( $q ) {
+            if ( !is_admin() && (is_shop() || class_exists('Woocommerce'))  ) {
+                if ( (isset($q->query['post_type']) && $q->query['post_type']=='product') || $q->is_search){
+                    $tax_query = (array) $q->get( 'tax_query' );
+                    $exclusions=$this->mg_get_product_cat_ids_to_exclude();
+                    if($exclusions){
+                        $inclusions=$this->mg_get_product_cat_ids_to_include();
+                        $tax_query[] = array(
+                            'relation' => 'OR',
+                            array(
+                                'taxonomy'  => 'product_cat',
+                                'field'     => 'term_id',
+                                'terms'     => $exclusions,
+                                'operator'  => 'NOT IN'),
+                              array(
+                                 'taxonomy'  => 'product_cat',
+                                 'field'     => 'term_id',
+                                 'terms'     => $inclusions,
+                                 'operator'  => 'IN'),
+                             );
+                        $q->set('tax_query',$tax_query);
+                    }
+                }
+            }
+        }
+        // could add a plugin configuration page where you can define cache expiration, add a button to explicitly expire cache, and perhaps have an override for hiding products
+        // meaning, if you want to hide products if ANY category is hidden, not just if ALL categories are hidden (noting that ALL is the current functionality)
+        function mg_get_product_cat_ids_to_exclude(){
+            if ( false === ( $mg_excluded_product_cats = get_transient( 'mg_excluded_product_cats' ) ) ) {
+                global $wpdb;
+                $mg_excluded_product_cats = $wpdb->get_col(
+                    "select distinct tt.term_id " .
+                    " from wp_term_relationships tr " .
+                    " join wp_term_taxonomy tt on tr.term_taxonomy_id = tt.term_taxonomy_id " .
+                    " join wp_termmeta tm on tt.term_id = tm.term_id " .
+                    " where tt.taxonomy='product_cat' AND meta_key='wh_meta_hide' and meta_value='on' " );
+                set_transient( 'mg_excluded_product_cats', $mg_excluded_product_cats, 60*60*1 ); // cache 60 seconds * 60 minutes * 1 hours .. should be a configurable value?
+            }
+            return $mg_excluded_product_cats;
+        }
+        function mg_get_product_cat_ids_to_include(){
+            if ( false === ( $mg_included_product_cats = get_transient( 'mg_included_product_cats' ) ) ) {
+                global $wpdb;
+                $mg_included_product_cats = $wpdb->get_col(
+                    "select distinct tt.term_id " .
+                    " from wp_term_relationships tr " .
+                    " join wp_term_taxonomy tt on tr.term_taxonomy_id = tt.term_taxonomy_id " .
+                    " join wp_termmeta tm on tt.term_id = tm.term_id " .
+                    " where tt.taxonomy='product_cat' AND meta_key='wh_meta_hide' and meta_value IS NULL " );
+                set_transient( 'mg_included_product_cats', $mg_included_product_cats, 60*60*1 ); // cache 60 seconds * 60 minutes * 1 hours .. should be a configurable value?
+            }
+            return $mg_included_product_cats;
         }
     }
 endif;
