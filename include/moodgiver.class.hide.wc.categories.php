@@ -113,7 +113,7 @@ if( !class_exists('mood_hide_categories_woocommerce') ):
         }
 
         function mg_hide_category_ajax_hide_category_woocommerce(){
-            update_term_meta(filter_input(INPUT_POST,$_POST['id'],FILTER_VALIDATE_INT), 'wh_meta_hide', filter_input(INPUT_POST,$_POST['checked'],FILTER_VALIDATE_BOOLEAN));
+            update_term_meta(filter_input(INPUT_POST,'id',FILTER_VALIDATE_INT), 'wh_meta_hide', (filter_input(INPUT_POST,'checked',FILTER_VALIDATE_BOOLEAN)?'on':null));
         }
 
         /**
