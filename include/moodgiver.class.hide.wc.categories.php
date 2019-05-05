@@ -203,23 +203,21 @@ if( !class_exists('mood_hide_categories_woocommerce') ):
                 global $wpdb;
                 $mg_excluded_product_cats = $wpdb->get_col(
                     "select distinct tt.term_id " .
-                    " from wp_term_relationships tr " .
-                    " join wp_term_taxonomy tt on tr.term_taxonomy_id = tt.term_taxonomy_id " .
+                    " from wp_term_taxonomy tt " .
                     " join wp_termmeta tm on tt.term_id = tm.term_id " .
                     " where tt.taxonomy='product_cat' AND meta_key='wh_meta_hide' and meta_value='on' " );
                 set_transient( 'mg_excluded_product_cats', $mg_excluded_product_cats, 60*60*1 ); // cache 60 seconds * 60 minutes * 1 hours .. should be a configurable value?
             }
             return $mg_excluded_product_cats;
         }
-        function mg_get_product_cat_ids_to_include(){
+        function mg_get_product_cat_ids_to_include($exclusions){
             if ( false === ( $mg_included_product_cats = get_transient( 'mg_included_product_cats' ) ) ) {
+                $exclusionString = implode(', ', array_map('intval', $exclusions));
                 global $wpdb;
                 $mg_included_product_cats = $wpdb->get_col(
                     "select distinct tt.term_id " .
-                    " from wp_term_relationships tr " .
-                    " join wp_term_taxonomy tt on tr.term_taxonomy_id = tt.term_taxonomy_id " .
-                    " join wp_termmeta tm on tt.term_id = tm.term_id " .
-                    " where tt.taxonomy='product_cat' AND meta_key='wh_meta_hide' and meta_value IS NULL " );
+                    " from wp_term_taxonomy tt " .
+                    " where tt.taxonomy='product_cat' AND tt.term_taxonomy_id not in (".$exclusionString.") " );
                 set_transient( 'mg_included_product_cats', $mg_included_product_cats, 60*60*1 ); // cache 60 seconds * 60 minutes * 1 hours .. should be a configurable value?
             }
             return $mg_included_product_cats;
